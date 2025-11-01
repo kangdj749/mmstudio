@@ -4,7 +4,7 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 
 const galleryImages = [
-  { src: "/images/guitar.jpeg", alt: "Ruang Drum Studio MM" },
+  { src: "/images/guitar.jpeg", alt: "Peralatan Rekaman Profesional" },
   { src: "/images/mejastudio.jpeg", alt: "Ruang Mixing & Mastering MM Studio" },
   { src: "/images/drum.jpeg", alt: "Ruang Drum Studio MM" },
   
