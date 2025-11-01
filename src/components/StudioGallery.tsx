@@ -8,7 +8,7 @@ const galleryImages = [
   { src: "/images/mejastudio.jpeg", alt: "Ruang Mixing & Mastering MM Studio" },
   { src: "/images/drum.jpeg", alt: "Ruang Drum Studio MM" },
   
-  { src: "/images/equalizer.jpeg", alt: "Peralatan Rekaman Profesional" },
+  { src: "/images/equalizer2.jpeg", alt: "Peralatan Rekaman Profesional" },
   { src: "/images/microphone1.jpeg", alt: "Peralatan Rekaman Profesional" },
   { src: "/images/mejamakan.jpeg", alt: "Ruang Produksi Musik" },
 ]
