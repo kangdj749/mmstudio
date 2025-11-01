@@ -15,6 +15,7 @@ import Masalah from "@/components/Masalah";
 import Keunggulan from "@/components/Keunggulan";
 import TestimoniDanCTA from "@/components/TestimoniCTA";
 import Solusi from "@/components/Solusi";
+import StudioGallery from "@/components/StudioGallery";
 
 
 interface SheetData {
@@ -78,6 +79,11 @@ const LandingPage: React.FC = () => {
           {/* Keunggulan */}
           <section id="keunggulan">
             <Keunggulan />
+          </section>
+
+          {/* Galery */}
+          <section id="galeri">
+            <StudioGallery />
           </section>
 
           {/* Testimoni */}
