@@ -4,8 +4,8 @@ import { GlobalToaster } from "@/components/GlobalToaster"
 
 
 export const metadata: Metadata = {
-  title: "Run For Roots",
-  description: "Run For Roots 2025 in Bandung by Laz GDI and NBL",
+  title: "MM Studio Recording",
+  description: "Studio rekaman, Recording, Mixing, Mastering",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
