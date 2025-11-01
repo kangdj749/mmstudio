@@ -1,90 +1,62 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { Mail, Phone, Instagram, Facebook } from "lucide-react"
+import { Youtube, Instagram, Phone } from "lucide-react"
 
-export default function Footer() {
+export default function FooterContact() {
   return (
-    <footer className="bg-green-700 text-white pt-16 pb-8">
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-          {/* Brand */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            viewport={{ once: true }}
-            className="space-y-4"
-          >
-            <h3 className="text-2xl font-bold">🌱 Run for Roots 2025</h3>
-            <p className="text-green-100 text-sm md:text-base leading-relaxed max-w-sm">
-              Charity Run sehat & seru, sekaligus aksi nyata menanam pohon dan
-              mangrove untuk bumi lebih hijau.
-            </p>
-          </motion.div>
-
-          {/* Kontak + Sosmed */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="space-y-4"
-          >
-            <h4 className="text-xl font-semibold mb-3">Kontak Panitia</h4>
-
-            <div className="flex items-center gap-3 text-green-100">
-              <Mail className="w-5 h-5" />
-              <a href="mailto:gdhuafa@gmail.com" className="hover:underline">
-                gdhuafa@gmail.com
-              </a>
-            </div>
-
-            <div className="flex items-center gap-3 text-green-100">
-              <Phone className="w-5 h-5" />
-              <a
-                href="https://wa.me/6281322817712"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-              >
-                +62 813-2281-7712 (WhatsApp)
-              </a>
-            </div>
-
-            <div className="flex gap-4 mt-4">
-              <a
-                href="https://instagram.com/grahadhuafa"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-green-300"
-              >
-                <Instagram className="w-6 h-6" />
-              </a>
-              <a
-                href="https://facebook.com/gdi"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-green-300"
-              >
-                <Facebook className="w-6 h-6" />
-              </a>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Hashtags */}
-        <div className="text-center mb-8">
-          <p className="text-green-100 text-sm">Hashtag Resmi:</p>
-          <p className="font-semibold text-green-50">
-            #RunForRoots2025 &nbsp; #LariUntukBumi &nbsp; #CharityRunBandung
+    <footer className="bg-black text-white py-12">
+      <div className="container mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
+        
+        {/* Info Studio */}
+        <div className="flex-1">
+          <h4 className="text-lg md:text-xl font-semibold text-red-400">MM Studio Recording</h4>
+          <p className="mt-2 text-gray-400">
+            Jl. Pandanwangi No.10, Bandung Timur, Jawa Barat<br/>
+            Indonesia
           </p>
+          <p className="mt-2 text-gray-400 flex items-center gap-2">
+            <Phone className="w-4 h-4 text-red-400" />
+            <a href="https://wa.me/6281205202000" className="underline hover:text-red-400">
+              0812-2052-2000
+            </a>
+          </p>
+
+          <div className="mt-3 flex flex-col space-y-1">
+            <a
+              href="https://www.instagram.com/mmstudiorecording/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-gray-400 hover:text-red-400 transition"
+            >
+              <Instagram className="w-4 h-4 text-red-400" />
+              @mmstudiorecording
+            </a>
+
+            <a
+              href="https://www.youtube.com/@AditMMofficial"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-gray-400 hover:text-red-400 transition"
+            >
+              <Youtube className="w-4 h-4 text-red-400" />
+              YouTube: AditMMofficial
+            </a>
+          </div>
         </div>
 
-        {/* Bottom */}
-        <div className="border-t border-green-600 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-green-100">
-          <p>© {new Date().getFullYear()} Run for Roots. All rights reserved.</p>
-          <p className="mt-2 md:mt-0">Made with 💚 in Bandung</p>
+        {/* Links & Navigasi */}
+        <div className="flex-1 flex flex-col md:items-center space-y-4">
+          <h5 className="text-md font-semibold text-gray-300">Navigasi Cepat</h5>
+          <a href="#solusi" className="text-gray-400 hover:text-red-400">Layanan</a>
+          <a href="#masalah" className="text-gray-400 hover:text-red-400">Masalah</a>
+          <a href="#keunggulan" className="text-gray-400 hover:text-red-400">Keunggulan</a>
+          <a href="#hero" className="text-gray-400 hover:text-red-400">Book Session</a>
+        </div>
+
+        {/* Copyright */}
+        <div className="flex-1 text-gray-500 text-sm md:text-right">
+          <p>© {new Date().getFullYear()} MM Studio Recording. All rights reserved.</p>
+          <p className="mt-2">Privacy & Terms</p>
         </div>
       </div>
     </footer>

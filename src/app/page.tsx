@@ -8,22 +8,14 @@ import "aos/dist/aos.css";
 import Navbar from "@/components/Header"
 import Hero from "@/components/Hero"
 import TentangKami from "@/components/TentangKami"
-
 import Footer from "@/components/Footer"
 import HybridWhatsAppCTA from "@/components/HybridWhatsAppCTA"
-import PricingSection from "@/components/TiketSection";
-import TimelineSection from "@/components/TimelineSection";
-import RundownSection from "@/components/RundownSection";
-import WhyJoinSection from "@/components/WhyJoinSection";
-import RealisasiSection from "@/components/RealisasiSection";
-import OrganizerSection from "@/components/OrganizerSection";
-import SponsorSection from "@/components/SponsorSection";
-//import PrizeSection from "@/components/PrizeSection";
 import dynamic from "next/dynamic"
+import Masalah from "@/components/Masalah";
+import Keunggulan from "@/components/Keunggulan";
+import TestimoniDanCTA from "@/components/TestimoniCTA";
+import Solusi from "@/components/Solusi";
 
-const PrizeSection = dynamic(() => import("@/components/PrizeSection"), {
-  ssr: false,
-})
 
 interface SheetData {
   [key: string]: { elements: any[] };
@@ -73,46 +65,27 @@ const LandingPage: React.FC = () => {
             <TentangKami />
           </section>
 
-          {/* Organizer */}
-          <section id="organizer">
-            <OrganizerSection />
+          {/* Masalah */}
+          <section id="masalah">
+            <Masalah />
           </section>
     
-          {/* Time Line */}
-          <section id="timeline">
-            <TimelineSection />
+          {/* Solusi */}
+          <section id="solusi">
+            <Solusi />
+          </section>
+
+          {/* Keunggulan */}
+          <section id="keunggulan">
+            <Keunggulan />
           </section>
 
           {/* Testimoni */}
-          <section id="rundown">
-            <RundownSection />
+          <section id="testimoni">
+            <TestimoniDanCTA />
           </section>
 
-          {/* Tiket */}
-          <section id="biaya">
-            <PricingSection />
-          </section>
-
-          {/* Kenapa */}
-          <section id="kenapa">
-            <WhyJoinSection />
-          </section>
-
-        {/* Hadiah */}
-          <section id="hadiah">
-            <PrizeSection />
-          </section>
-
-        {/* Realisasi  */}
-          <section>
-            <RealisasiSection />
-          </section>
-         
-         {/* Sponsor  */}
-          <section>
-            <SponsorSection />
-          </section>
-         
+                                     
           {/* Footer */}
           <Footer />
           {/* WhatsApp CTA hybrid */}

@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
+import { useState, Suspense } from "react"
 import { useForm, SubmitHandler, UseFormRegisterReturn } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2 } from "lucide-react"
+import { Loader2, Mic2 } from "lucide-react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 
@@ -12,57 +12,44 @@ import { useRouter } from "next/navigation"
 const formSchema = z.object({
   nama: z.string().min(2, "Nama minimal 2 karakter"),
   email: z.string().email("Format email tidak valid"),
-  nohp: z
-    .string()
-    .min(8, "Nomor HP terlalu pendek")
-    .regex(/^[0-9+]+$/, "Hanya angka atau tanda +"),
-  lari: z.enum(["FAMILY - 2,5K", "CASUAL - 5K", "RACE - 10K"]),
-  jersey: z.string().min(1, "Wajib pilih ukuran jersey"),
-  pembayaran: z.string().min(1, "Wajib pilih metode pembayaran"),
-  fundriser: z.string().optional(),
+  nohp: z.string().min(8, "Nomor HP terlalu pendek"),
+  layanan: z.enum([
+    "Recording",
+    "Mixing & Mastering",
+    "Pembuatan Lagu",
+    "Video Clip",
+    "Music Scoring",
+    "Kelas Vocal / Music Direction",
+  ]),
+  jadwal: z.string().min(1, "Pilih jadwal sesi rekaman"),
+  metodePembayaran: z.string().min(1, "Wajib pilih metode pembayaran"),
+  catatan: z.string().optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
 
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbyepCFd9Chfse9obYsuMxcdFYzoLR4KFEAH2SSvd0SQGildOO2kYxTX_j2IIc7nZ6s/exec"
+  "https://script.google.com/macros/s/AKfycbyqSHEOSQE8wljDztjaJCchmLhFesOJy4igROhMo5a890TcrzIvltHqs_KjPBi6les/exec" // ganti dengan script kamu
 
-export default function RegistrasiSectionWrapper() {
+export default function BookingStudioWrapper() {
   return (
-    <Suspense fallback={<div className="text-center py-20">Loading form...</div>}>
-      <RegistrasiSection />
+    <Suspense fallback={<div className="text-center py-20 text-gray-400">Loading form...</div>}>
+      <BookingStudioSection />
     </Suspense>
   )
 }
 
-function RegistrasiSection() {
+function BookingStudioSection() {
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
-  const [activeFundriser, setActiveFundriser] = useState("Tanpa Fundriser")
-
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
-    defaultValues: { fundriser: "Tanpa Fundriser" },
   })
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search)
-      const fundriserFromLink = params.get("fundriser")
-      const stored = localStorage.getItem("fundriser")
-      const finalFundriser = fundriserFromLink || stored || "Tanpa Fundriser"
-
-      setActiveFundriser(finalFundriser)
-      setValue("fundriser", finalFundriser)
-      if (fundriserFromLink) localStorage.setItem("fundriser", fundriserFromLink)
-    }
-  }, [setValue])
 
   const handleSubmitForm: SubmitHandler<FormValues> = async (data) => {
     if (submitting) return
@@ -74,20 +61,19 @@ function RegistrasiSection() {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams(data as any),
       })
-      if (!res.ok) throw new Error("Gagal simpan ke Google Sheets")
+      if (!res.ok) throw new Error("Gagal simpan data")
 
-      toast.success("Registrasi berhasil ✅", {
-        description: "Kamu akan diarahkan ke halaman konfirmasi pembayaran...",
+      toast.success("Booking berhasil 🎧", {
+        description: "Tim MM Studio akan segera menghubungi via WhatsApp.",
       })
 
       setTimeout(() => {
         const query = new URLSearchParams(data as any).toString()
-        router.push(`/konfirmasi?${query}`)
+        router.push(`/thank-you?${query}`)
       }, 1200)
     } catch (err) {
-      console.error(err)
-      toast.error("Registrasi Gagal ❌", {
-        description: "Terjadi kesalahan. Coba lagi ya 🙏",
+      toast.error("Terjadi kesalahan ❌", {
+        description: "Coba kirim ulang form-nya ya.",
       })
     } finally {
       setSubmitting(false)
@@ -96,25 +82,29 @@ function RegistrasiSection() {
 
   return (
     <section
-      id="registrasi"
-      className="py-20 px-4 bg-gradient-to-b from-green-50 via-white to-green-50"
+      id="booking"
+      className="py-20 px-4 bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 text-white"
     >
       <div className="w-full max-w-md mx-auto">
-        <div className="bg-white rounded-3xl shadow-lg border border-green-100 p-6 md:p-10">
-          <h2 className="text-3xl font-bold text-green-700 text-center">
-            Form Registrasi Peserta
-          </h2>
-          <p className="text-sm text-gray-600 text-center mt-2">
-            Lengkapi data di bawah ini. Setelah submit, kamu akan diarahkan ke
-            halaman konfirmasi pembayaran.
-          </p>
+        <div className="bg-neutral-900/70 backdrop-blur-xl border border-red-500/30 rounded-2xl shadow-lg p-6 md:p-10">
+          <div className="flex flex-col items-center mb-6">
+            <div className="bg-red-600/20 p-3 rounded-full mb-3">
+              <Mic2 className="h-6 w-6 text-red-400" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-red-400 text-center">
+              Booking Sesi Studio Musik
+            </h2>
+            <p className="text-sm text-gray-400 text-center mt-2">
+              Lengkapi data di bawah ini untuk memulai perjalanan musikmu di MM Studio 🎶
+            </p>
+          </div>
 
-          <form onSubmit={handleSubmit(handleSubmitForm)} className="mt-8 space-y-6">
+          <form onSubmit={handleSubmit(handleSubmitForm)} className="mt-6 space-y-6">
             <FormInput
               label="Nama Lengkap"
               register={register("nama")}
               error={errors.nama?.message}
-              placeholder="cth: Budi Santoso"
+              placeholder="cth: Andi Pratama"
             />
             <FormInput
               label="Email"
@@ -130,37 +120,49 @@ function RegistrasiSection() {
               placeholder="cth: 08123456789"
             />
             <FormSelect
-              label="Kategori Lari"
-              register={register("lari")}
-              error={errors.lari?.message}
-              options={["FAMILY - 2,5K", "CASUAL - 5K", "RACE - 10K"]}
+              label="Layanan Studio"
+              register={register("layanan")}
+              error={errors.layanan?.message}
+              options={[
+                "Recording",
+                "Mixing & Mastering",
+                "Pembuatan Lagu",
+                "Video Clip",
+                "Music Scoring",
+                "Kelas Vocal / Music Direction",
+              ]}
             />
-            <FormSelect
-              label="Ukuran Jersey"
-              register={register("jersey")}
-              error={errors.jersey?.message}
-              options={["S (P=66, L=48, Lengan=21)", "M (P=68, L=50, Lengan=22)", "L (P=71, L=52, Lengan=23)", "XL (P=74, L=54, Lengan=24)", "XXL (P=77, L=56, Lengan=25)"]}
+            <FormInput
+              label="Jadwal / Tanggal Rekaman"
+              type="date"
+              register={register("jadwal")}
+              error={errors.jadwal?.message}
             />
             <FormSelect
               label="Metode Pembayaran"
-              register={register("pembayaran")}
-              error={errors.pembayaran?.message}
-              options={["Transfer Bank", "E-Wallet (OVO/Gopay/Dana)"]}
+              register={register("metodePembayaran")}
+              error={errors.metodePembayaran?.message}
+              options={["Transfer Bank", "E-Wallet", "Cash di Studio"]}
             />
-
-            <input type="hidden" {...register("fundriser")} />
+            <FormTextarea
+              label="Catatan Tambahan (opsional)"
+              register={register("catatan")}
+              placeholder="cth: Ingin rekam lagu pop akustik dengan suasana intimate"
+            />
 
             <button
               type="submit"
               disabled={submitting}
-              className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-green-600 text-white font-semibold py-3 hover:bg-green-700 transition disabled:opacity-60"
+              className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-red-500 text-black font-semibold py-3 hover:bg-red-400 transition shadow-[0_0_20px_-5px_#34d39980] disabled:opacity-60"
             >
               {submitting ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" /> Mengirim...
                 </>
               ) : (
-                "Daftar Sekarang"
+                <>
+                  <Mic2 className="h-5 w-5" /> Book Session Sekarang
+                </>
               )}
             </button>
           </form>
@@ -188,14 +190,14 @@ function FormInput({
 }: FormInputProps) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
       <input
         type={type}
         {...register}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-green-200 px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-500 bg-white"
+        className="w-full rounded-xl border border-neutral-700 bg-neutral-800 text-white px-4 py-2.5 outline-none focus:ring-2 focus:ring-red-400 placeholder-gray-500"
       />
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+      {error && <p className="mt-1 text-sm text-red-400">{error}</p>}
     </div>
   )
 }
@@ -210,10 +212,10 @@ interface FormSelectProps {
 function FormSelect({ label, register, error, options }: FormSelectProps) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
       <select
         {...register}
-        className="w-full rounded-xl border border-green-200 px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-500 bg-white"
+        className="w-full rounded-xl border border-neutral-700 bg-neutral-800 text-white px-4 py-2.5 outline-none focus:ring-2 focus:ring-red-400"
       >
         <option value="">-- Pilih {label} --</option>
         {options.map((opt) => (
@@ -222,7 +224,26 @@ function FormSelect({ label, register, error, options }: FormSelectProps) {
           </option>
         ))}
       </select>
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+      {error && <p className="mt-1 text-sm text-red-400">{error}</p>}
+    </div>
+  )
+}
+
+interface FormTextareaProps {
+  label: string
+  register: UseFormRegisterReturn
+  placeholder?: string
+}
+
+function FormTextarea({ label, register, placeholder }: FormTextareaProps) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
+      <textarea
+        {...register}
+        placeholder={placeholder}
+        className="w-full rounded-xl border border-neutral-700 bg-neutral-800 text-white px-4 py-2.5 outline-none focus:ring-2 focus:ring-red-400 min-h-[100px] placeholder-gray-500"
+      />
     </div>
   )
 }

@@ -7,12 +7,10 @@ import Image from "next/image"
 
 const navLinks = [
   { name: "Beranda", href: "#hero", id: "hero" },
-  { name: "Tentang Event", href: "#tentang", id: "tentang" },
-  { name: "Timeline", href: "#timeline", id: "timeline" },
- // { name: "Bentuk Kegiatan", href: "#rundown", id: "rundown" },
-  { name: "Biaya", href: "#biaya", id: "biaya" },
-  { name: "Kenapa Harus Ikut", href: "#kenapa", id: "kenapa" },
- // { name: "Realisasi", href: "#realisasi", id: "realisasi" },
+  { name: "Tentang", href: "#tentang", id: "tentang" },
+  { name: "Masalah", href: "#masalah", id: "masalah" },
+  { name: "Solusi", href: "#solusi", id: "solusi" },
+  { name: "Keunggulan", href: "#keunggulan", id: "keunggulan" },
 ]
 
 export default function Navbar() {
@@ -20,21 +18,16 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState("hero")
 
-  // Efek smooth scroll untuk semua anchor link
   useEffect(() => {
     document.documentElement.style.scrollBehavior = "smooth"
   }, [])
 
-  // Deteksi scroll untuk background navbar
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10)
-    }
+    const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Scroll Spy pakai IntersectionObserver
   useEffect(() => {
     const sections = navLinks.map((link) =>
       document.querySelector(link.href)
@@ -43,108 +36,95 @@ export default function Navbar() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id)
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id)
         })
       },
       { threshold: 0.4 }
     )
 
-    sections.forEach((section) => {
-      if (section) observer.observe(section)
-    })
-
-    return () => {
-      sections.forEach((section) => {
-        if (section) observer.unobserve(section)
-      })
-    }
+    sections.forEach((s) => s && observer.observe(s))
+    return () => sections.forEach((s) => s && observer.unobserve(s))
   }, [])
 
-  // Fungsi klik nav → smooth scroll + close mobile menu
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
     const target = document.querySelector(href)
     if (target) {
-      const offset = -70 // jarak untuk header tinggi 70px
-      const topPosition = target.getBoundingClientRect().top + window.scrollY + offset
-      window.scrollTo({ top: topPosition, behavior: "smooth" })
+      const offset = -70
+      const top = target.getBoundingClientRect().top + window.scrollY + offset
+      window.scrollTo({ top, behavior: "smooth" })
     }
     setIsOpen(false)
   }
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 font-sans transition-all duration-300 ${
-        scrolled ? "shadow-lg" : ""
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled ? "shadow-xl shadow-black/40" : ""
       }`}
     >
-      {/* Navbar Wrapper */}
+      {/* Background */}
       <div
         className={`backdrop-blur-xl border-b transition-all duration-300 ${
           scrolled
-            ? "bg-white/90 border-green-100"
-            : "bg-gradient-to-r from-green-800/90 to-green-700/90 text-white border-transparent"
+            ? "bg-black/95 border-red-900/50"
+            : "bg-gradient-to-r from-black/90 via-neutral-900/85 to-neutral-950/90 border-transparent"
         }`}
       >
         <div className="container mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">
-          {/* Logo + Brand */}
+          {/* Logo */}
           <a href="#hero" className="flex items-center gap-3 group">
-            <div className="relative w-9 h-9 md:w-11 md:h-11">
+            <div className="relative w-10 h-10 md:w-12 md:h-12">
               <Image
-                src="/RUN_FOR_ROOTS_LOGO_GREEN.png"
-                alt="Logo Run for Roots 2025"
+                src="/mmstudio.png"
+                alt="MM Studio Logo"
                 fill
                 className="object-contain transition-transform duration-300 group-hover:scale-110"
                 priority
               />
             </div>
-            <span
-              className={`text-lg md:text-xl font-bold transition-colors ${
-                scrolled ? "text-green-800" : "text-white"
-              }`}
-            >
-              Run for Roots 2025
+            <span className="text-lg md:text-xl font-bold tracking-wide text-white drop-shadow-[0_1px_6px_rgba(255,255,255,0.4)]">
+              MM Studio
             </span>
           </a>
 
-          {/* Desktop Menu */}
+          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link, i) => {
-              const isActive = activeSection === link.id
+            {navLinks.map((link) => {
+              const active = activeSection === link.id
               return (
                 <a
-                  key={i}
+                  key={link.id}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`relative font-medium transition-colors group ${
-                    scrolled
-                      ? isActive
-                        ? "text-green-700"
-                        : "text-gray-700 hover:text-green-700"
-                      : isActive
-                      ? "text-white"
-                      : "text-green-50 hover:text-white"
+                  className={`relative font-semibold text-sm uppercase tracking-wide transition-all group ${
+                    active
+                      ? "text-red-400"
+                      : "text-white hover:text-red-300"
                   }`}
+                  style={{
+                    textShadow: active
+                      ? "0 0 10px rgba(239,68,68,0.8)"
+                      : "0 0 6px rgba(255,255,255,0.5)",
+                  }}
                 >
                   {link.name}
                   <span
-                    className={`absolute left-0 -bottom-1 h-[2px] transition-all duration-300 ${
-                      isActive ? "w-full" : "w-0 group-hover:w-full"
-                    } ${scrolled ? "bg-green-600" : "bg-green-300"}`}
+                    className={`absolute left-0 -bottom-1 h-[2px] rounded-full transition-all duration-300 ${
+                      active
+                        ? "w-full bg-red-500"
+                        : "w-0 group-hover:w-full bg-red-400/80"
+                    }`}
                   ></span>
                 </a>
               )
             })}
           </nav>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`md:hidden transition-colors ${
-              scrolled ? "text-green-800" : "text-white"
-            }`}
+            className="md:hidden text-white hover:text-red-400 transition-transform active:scale-90"
             aria-label="Toggle menu"
           >
             {isOpen ? <X size={26} /> : <Menu size={26} />}
@@ -160,20 +140,20 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="md:hidden bg-white/95 backdrop-blur-xl border-b border-green-100 shadow-lg"
+            className="md:hidden bg-black/95 backdrop-blur-xl border-t border-red-900/40 shadow-lg"
           >
             <nav className="flex flex-col p-6 space-y-4">
-              {navLinks.map((link, i) => {
-                const isActive = activeSection === link.id
+              {navLinks.map((link) => {
+                const active = activeSection === link.id
                 return (
                   <a
-                    key={i}
+                    key={link.id}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className={`text-base font-medium transition ${
-                      isActive
-                        ? "text-green-700 font-semibold"
-                        : "text-gray-700 hover:text-green-700"
+                    className={`text-base font-medium tracking-wide transition-all ${
+                      active
+                        ? "text-red-400 font-semibold"
+                        : "text-white hover:text-red-300"
                     }`}
                   >
                     {link.name}
